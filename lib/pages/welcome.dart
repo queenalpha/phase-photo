@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:phase_photo/configuration/bottomNavigation.dart";
 import "package:phase_photo/pages/home.dart";
 
 class SplashScreen extends StatefulWidget {
@@ -27,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen>
     _animation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => HomePage()),
+          MaterialPageRoute(builder: (_) => const NavigationBarDemo()),
         );
       }
     });

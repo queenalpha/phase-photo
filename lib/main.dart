@@ -3,23 +3,22 @@ import 'package:phase_photo/configuration/bottomNavigation.dart';
 import 'package:phase_photo/pages/home.dart';
 import 'package:phase_photo/pages/profile.dart';
 import 'package:phase_photo/pages/welcome.dart';
+// import 'package:phase_photo/navigation_bar_demo.dart'; // Assuming your NavigationBarDemo is in a separate file
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Splash Screen',
-      home: SplashScreen(),
+      title: 'Phase Studio',
+      home: SplashScreen(), 
       routes: {
-        'home': (context) => const NavigationBarDemo(),
         'profile': (context) => const ProfilePage(),
+        'home': (context) => const NavigationBarDemo(), 
       },
     );
   }
