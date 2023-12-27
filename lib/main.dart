@@ -1,9 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:phase_photo/firebase_options.dart';
+import 'package:phase_photo/configuration/bottomNavigation.dart';
 import 'package:phase_photo/pages/home.dart';
 import 'package:phase_photo/pages/login.dart';
 import 'package:phase_photo/pages/register.dart';
+import 'package:phase_photo/pages/profile.dart';
+import 'package:phase_photo/pages/welcome.dart';
+// import 'package:phase_photo/navigation_bar_demo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,18 +18,18 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: 'login',
+      initialRoute: 'splash_screen',
       routes: {
-        'register': (context) => Register(),
-        'login': (context) => Login(),
-        'home': (context) => MyHomePage(),
+        'splash_screen': (context) => SplashScreen(),
+        'register': (context) => const Register(),
+        'login': (context) => const Login(),
+        // 'home': (context) => const HomePage(),
+        'profile': (context) => const ProfilePage(),
+        'home': (context) => const NavigationBarDemo(),
       },
     );
   }
