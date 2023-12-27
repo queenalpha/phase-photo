@@ -3,7 +3,7 @@ import 'package:phase_photo/configuration/bottomNavigation.dart';
 import 'package:phase_photo/pages/home.dart';
 import 'package:phase_photo/pages/profile.dart';
 import 'package:phase_photo/pages/welcome.dart';
-// import 'package:phase_photo/navigation_bar_demo.dart'; // Assuming your NavigationBarDemo is in a separate file
+// import 'package:phase_photo/navigation_bar_demo.dart'; 
 
 void main() {
   runApp(MyApp());
