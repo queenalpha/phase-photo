@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phase_photo/pages/forgetpassword.dart';
 import 'package:phase_photo/pages/home.dart';
 import 'package:phase_photo/pages/register.dart';
 
@@ -14,9 +15,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: 'register',
+      initialRoute: 'Forgetpassword',
       routes: {
-        'register': (context) => Register(),
+        'Forgetpassword': (context) => ForgetPassword(),
       },
     );
   }
