@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.asset(_items[index])),
-          ); // Make sure to return the Container widget
+          ); 
         },
       ),
     );
