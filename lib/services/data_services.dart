@@ -19,4 +19,8 @@ class DataServices {
       return null;
     }
   }
+
+  Future<void> dummyMethod() async {
+    print('hello');
+  }
 }
