@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:phase_photo/configuration/bottomNavigation.dart';
 import 'package:phase_photo/pages/home.dart';
+import 'package:phase_photo/pages/profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,13 +10,16 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
+      title: 'Splash Screen',
+      initialRoute: 'home',
+      routes: {
+        'home': (context) => const NavigationBarDemo(),
+        'profile': (context) => const ProfilePage(),
+      },
     );
   }
 }
