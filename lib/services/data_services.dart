@@ -31,4 +31,28 @@ class DataServices {
 
     return userCredential.user;
   }
+
+  Future<void> resetPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  // Future<void> _confirmPasswordReset(ActionCodeInfo link) async {
+  //   try {
+  //     await FirebaseAuth.instance.confirmPasswordReset(
+  //       newPassword: 'new_password', // Obtained from user input
+  //     );
+  //     // Password reset successful, navigate to login or home screen
+  //   } on FirebaseAuthException catch (e) {
+  //     // Handle errors appropriately
+  //     if (e.code == 'expired-action-code') {
+  //       // Inform the user that the link has expired
+  //     } else {
+  //       // Handle other errors
+  //     }
+  //   }
+  // }
 }

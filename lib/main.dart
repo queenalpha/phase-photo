@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:phase_photo/firebase_options.dart';
 import 'package:phase_photo/configuration/bottomNavigation.dart';
+import 'package:phase_photo/pages/forgetpassword.dart';
 import 'package:phase_photo/pages/home.dart';
 import 'package:phase_photo/pages/login.dart';
 import 'package:phase_photo/pages/register.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       initialRoute: 'splash_screen',
       routes: {
         'splash_screen': (context) => SplashScreen(),
-        'register': (context) => const Register(),
+        'forgot_password': (context) => const ForgetPassword(),
         'login': (context) => const Login(),
         // 'home': (context) => const HomePage(),
         'profile': (context) => const ProfilePage(),

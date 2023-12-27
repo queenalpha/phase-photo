@@ -129,7 +129,29 @@ class LoginState extends State<Login> {
                               hintText: "Password",
                             ),
                           ),
-                          const SizedBox(height: 50),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, 'forgot_password');
+                                },
+                                child: const Text(
+                                  'Forgot Password?',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 14,
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 35),
                           RoundedButton(
                             colour: Colors.black,
                             title: 'Sign In',
