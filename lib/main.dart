@@ -1,8 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:phase_photo/firebase_options.dart';
 import 'package:phase_photo/pages/home.dart';
+import 'package:phase_photo/pages/login.dart';
 import 'package:phase_photo/pages/register.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
@@ -14,9 +21,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: 'register',
+      initialRoute: 'login',
       routes: {
         'register': (context) => Register(),
+        'login': (context) => Login(),
+        'home': (context) => MyHomePage(),
       },
     );
   }
