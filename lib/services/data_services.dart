@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 class DataServices {
-  Future<UserCredential?> registerUserWithEmailPassword(
+  Future<User?> registerUserWithEmailPassword(
       String email, String password, String displayName) async {
     try {
       UserCredential userCredential =
@@ -13,14 +14,21 @@ class DataServices {
       // Set the display name
       await userCredential.user!.updateDisplayName(displayName);
       print('User registered successfully with display name: $displayName');
-      return userCredential;
+      return userCredential.user;
     } catch (e) {
       print('Error registering user: $e');
       return null;
     }
   }
 
-  Future<void> dummyMethod() async {
-    print('hello');
+  Future<User?> signInWithEmailAndPassword(
+      String email, String password) async {
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    return userCredential.user;
   }
 }

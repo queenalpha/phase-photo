@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:phase_photo/components/button.dart';
 import 'package:phase_photo/pages/register.dart';
+import 'package:phase_photo/services/data_services.dart';
 import 'package:phase_photo/util/validator.dart';
 
 const kTextFieldDecoration = InputDecoration(
@@ -31,7 +32,8 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-  final _auth = FirebaseAuth.instance;
+  final _dataService = DataServices();
+
   final _loginFormKey = GlobalKey<FormState>();
 
   final _emailTextController = TextEditingController();
@@ -135,11 +137,10 @@ class LoginState extends State<Login> {
                             onPressed: () async {
                               if (_loginFormKey.currentState!.validate()) {
                                 try {
-                                  UserCredential user =
-                                      await _auth.signInWithEmailAndPassword(
-                                          email: _emailTextController.text,
-                                          password:
-                                              _passwordTextController.text);
+                                  User? user = await _dataService
+                                      .signInWithEmailAndPassword(
+                                          _emailTextController.text,
+                                          _passwordTextController.text);
 
                                   if (user != null) {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -150,13 +151,22 @@ class LoginState extends State<Login> {
                                     Navigator.pushReplacementNamed(
                                         context, 'home');
                                   }
-                                } catch (e) {
-                                  print(e.toString());
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Login failed: $e'),
-                                    ),
-                                  );
+                                } on FirebaseAuthException catch (e) {
+                                  if (e.code == 'invalid-credential') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            'Login failed: User not found or Wrong Password'),
+                                      ),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            'Login failed: Error ${e.code}'),
+                                      ),
+                                    );
+                                  }
                                 }
                               }
                             },
