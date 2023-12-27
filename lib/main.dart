@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:phase_photo/configuration/bottomNavigation.dart';
 import 'package:phase_photo/pages/home.dart';
 import 'package:phase_photo/pages/profile.dart';
+import 'package:phase_photo/pages/welcome.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Splash Screen',
-      initialRoute: 'home',
+      home: SplashScreen(),
       routes: {
         'home': (context) => const NavigationBarDemo(),
         'profile': (context) => const ProfilePage(),
