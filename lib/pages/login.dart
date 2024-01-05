@@ -5,24 +5,8 @@ import 'package:phase_photo/pages/register.dart';
 import 'package:phase_photo/services/data_services.dart';
 import 'package:phase_photo/util/validator.dart';
 
-const kTextFieldDecoration = InputDecoration(
-  filled: true,
-  fillColor: Color(0xFFD9D9D9),
-  hintText: 'Enter a value',
-  hintStyle: TextStyle(color: Colors.grey), // Adjust hint text color as needed
-  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-  border: OutlineInputBorder(
-    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-  ),
-  enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide.none,
-    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-  ),
-  focusedBorder: OutlineInputBorder(
-    borderSide: BorderSide.none,
-    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-  ),
-);
+import '../configuration/textField.dart';
+
 
 class Login extends StatefulWidget {
   const Login({Key? key});
@@ -96,7 +80,7 @@ class LoginState extends State<Login> {
                             validator: (value) => Validator.validateEmail(
                               email: value,
                             ),
-                            decoration: kTextFieldDecoration.copyWith(
+                            decoration: costumeTextField.copyWith(
                               prefixIcon: const Icon(
                                 Icons.email,
                                 color: Colors.black,
@@ -112,7 +96,7 @@ class LoginState extends State<Login> {
                             validator: (value) => Validator.validatePassword(
                               password: value,
                             ),
-                            decoration: kTextFieldDecoration.copyWith(
+                            decoration: costumeTextField.copyWith(
                               prefixIcon: const Icon(
                                 Icons.key,
                                 color: Colors.black,

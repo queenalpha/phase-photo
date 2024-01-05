@@ -1,28 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:phase_photo/components/button.dart';
+import 'package:phase_photo/configuration/textField.dart';
 import 'package:phase_photo/pages/login.dart';
 import 'package:phase_photo/services/data_services.dart';
 import 'package:phase_photo/util/validator.dart';
-
-const kTextFieldDecoration = InputDecoration(
-  filled: true,
-  fillColor: Color(0xFFD9D9D9),
-  hintText: 'Enter a value',
-  hintStyle: TextStyle(color: Colors.grey), // Adjust hint text color as needed
-  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-  border: OutlineInputBorder(
-    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-  ),
-  enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide.none,
-    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-  ),
-  focusedBorder: OutlineInputBorder(
-    borderSide: BorderSide.none,
-    borderRadius: BorderRadius.all(Radius.circular(32.0)),
-  ),
-);
 
 class Register extends StatefulWidget {
   const Register({Key? key});

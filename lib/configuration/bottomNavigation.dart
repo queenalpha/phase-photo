@@ -1,3 +1,4 @@
+import 'package:phase_photo/pages/add_photo.dart';
 import 'package:phase_photo/pages/home.dart';
 import 'package:phase_photo/pages/profile.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class _NavigationBarDemoState extends State<NavigationBarDemo> {
 
   final List<Widget> _page = const [
     HomePage(),
+    CreateHistory(),
     ProfilePage(),
   ];
 
@@ -32,8 +34,12 @@ class _NavigationBarDemoState extends State<NavigationBarDemo> {
         currentIndex: _currentIndex,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_filled),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_a_photo),
+            label: 'Create History',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
