@@ -81,7 +81,7 @@ class RegisterState extends State<Register> {
                             validator: (value) => Validator.validateName(
                               name: value,
                             ),
-                            decoration: kTextFieldDecoration.copyWith(
+                            decoration: costumeTextField.copyWith(
                               prefixIcon: const Icon(
                                 Icons.person,
                                 color: Color(0xFF1A1C29),
@@ -96,7 +96,7 @@ class RegisterState extends State<Register> {
                             validator: (value) => Validator.validateEmail(
                               email: value,
                             ),
-                            decoration: kTextFieldDecoration.copyWith(
+                            decoration: costumeTextField.copyWith(
                               prefixIcon: Icon(
                                 Icons.email,
                                 color: Color(0xFF1A1C29),
@@ -112,7 +112,7 @@ class RegisterState extends State<Register> {
                             validator: (value) => Validator.validatePassword(
                               password: value,
                             ),
-                            decoration: kTextFieldDecoration.copyWith(
+                            decoration: costumeTextField.copyWith(
                               prefixIcon: const Icon(
                                 Icons.key,
                                 color: Color(0xFF1A1C29),
@@ -140,7 +140,7 @@ class RegisterState extends State<Register> {
                               }
                               return null;
                             },
-                            decoration: kTextFieldDecoration.copyWith(
+                            decoration: costumeTextField.copyWith(
                               prefixIcon: const Icon(
                                 Icons.key,
                                 color: Color(0xFF1A1C29),
