@@ -1,50 +1,97 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:phase_photo/services/data_services.dart';
 
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _HomePageState extends State<HomePage> {
+  final dataService = DataServices();
 
-  void _incrementCounter() {
+  final _items = [
+    "assets/analog.jpg",
+    "assets/bird.jpg",
+    "assets/man with a cap.jpg",
+    "assets/man with shadow.jpg",
+    "assets/plant.jpg",
+    "assets/sofia building.jpg",
+    "assets/boy.jpg",
+  ];
+  late Stream<List<DocumentSnapshot>> _imagesStream;
+
+  @override
+  void initState() {
+    super.initState();
+    _imagesStream = dataService.getAllImages().asStream();
+  }
+
+  Future<void> refreshData() async {
     setState(() {
-      _counter++;
+      _imagesStream = dataService.getAllImages().asStream();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    refreshData();
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text("PHASE",
+            style: TextStyle(
+              color: Colors.black,
+            )),
+        centerTitle: true,
+        backgroundColor: Colors.white,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+      body: StreamBuilder(
+        stream: _imagesStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else if (!snapshot.hasData) {
+            return Center(
+              child: Text(
+                'Gallery kosong',
+                style: TextStyle(fontSize: 16),
+              ),
+            );
+          } else if (snapshot.data!.isEmpty) {
+            return Center(
+              child: Text(
+                'Gallery kosong',
+                style: TextStyle(fontSize: 16),
+              ),
+            );
+          } else {
+            List<DocumentSnapshot> imagesSnapshot = snapshot.data!;
+            print(imagesSnapshot.length);
+            return MasonryGridView.builder(
+              itemCount: imagesSnapshot.length,
+              gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2),
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    // child: Image.asset(_items[index]),
+                    child: Image.network(
+                      imagesSnapshot.elementAt(index).get('image_url'),
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+        },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "526752852832",
+    "project_id": "phase-photo",
+    "storage_bucket": "phase-photo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526752852832:android:f1a2c5508b76bebf2f0c05",
+        "android_client_info": {
+          "package_name": "com.example.phase_photo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCLqmoLilCGXW7gOdQj9TjZMDEMHwpB6Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
