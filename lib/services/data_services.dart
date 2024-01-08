@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class DataServices {
+  final imageCollection = FirebaseFirestore.instance.collection('images');
+
   Future<User?> registerUserWithEmailPassword(
       String email, String password, String displayName) async {
     try {
@@ -37,6 +40,34 @@ class DataServices {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  Future<DocumentReference?> addImage(dynamic data) async {
+    DocumentReference? addedDocument = null;
+    try {
+      addedDocument = await imageCollection.add(data);
+      return addedDocument;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return addedDocument;
+    }
+  }
+
+  Future<List<DocumentSnapshot>> getAllImages() async {
+    try {
+      var imagesSnapshot = await imageCollection.get();
+      if (kDebugMode) {
+        print(imagesSnapshot.docs.length);
+      }
+      return imagesSnapshot.docs;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      return [];
     }
   }
 
