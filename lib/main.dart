@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
         // 'home': (context) => const HomePage(),
         'profile': (context) => const ProfilePage(),
         'home': (context) => const NavigationBarDemo(),
+        'register': (context) => const Register(),
       },
     );
   }
