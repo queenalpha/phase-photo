@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:phase_photo/components/button.dart';
+import 'package:phase_photo/services/data_services.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key});
@@ -12,6 +14,7 @@ class _EditProfile extends State<EditProfile> {
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
 
+  final dataService = DataServices();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +81,27 @@ class _EditProfile extends State<EditProfile> {
             width: 300,
             height: 35,
             textColor: Colors.white,
-            onPressed: () {},
+            onPressed: () async {
+              try {
+                User? user = FirebaseAuth.instance.currentUser;
+                String? oldUsername = user?.displayName;
+
+                await user?.updateDisplayName(_usernameController.text);
+                await user?.verifyBeforeUpdateEmail(_emailController.text);
+
+                await dataService.updateImagesUploader(
+                    oldUsername!, _usernameController.text);
+                await user?.reload();
+
+                Navigator.pop(context);
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Error: $e'),
+                  ),
+                );
+              }
+            },
           )
         ],
       ),

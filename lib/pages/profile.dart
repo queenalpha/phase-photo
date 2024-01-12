@@ -45,10 +45,10 @@ class _Profile extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    refreshData();
+    // refreshData();
     return Scaffold(
       body: DefaultTabController(
-        length: 2,
+        length: 1,
         child: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
@@ -115,7 +115,7 @@ class _Profile extends State<ProfilePage> {
                     ),
                     tabs: [
                       Tab(text: 'Uploaded'),
-                      Tab(text: 'Saved'),
+                      // Tab(text: 'Saved'),
                     ],
                   ),
                 ),
@@ -171,21 +171,21 @@ class _Profile extends State<ProfilePage> {
               ),
 
               // saved page
-              GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 4.0,
-                  crossAxisSpacing: 4.0,
-                  childAspectRatio: 1.0,
-                ),
-                itemCount: 5,
-                itemBuilder: (BuildContext context, int index) {
-                  return Image.asset(
-                    _items[index],
-                    fit: BoxFit.cover,
-                  );
-                },
-              ),
+              // GridView.builder(
+              //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              //     crossAxisCount: 3,
+              //     mainAxisSpacing: 4.0,
+              //     crossAxisSpacing: 4.0,
+              //     childAspectRatio: 1.0,
+              //   ),
+              //   itemCount: 5,
+              //   itemBuilder: (BuildContext context, int index) {
+              //     return Image.asset(
+              //       _items[index],
+              //       fit: BoxFit.cover,
+              //     );
+              //   },
+              // ),
             ],
           ),
         ),

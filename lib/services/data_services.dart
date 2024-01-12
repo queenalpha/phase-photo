@@ -141,6 +141,28 @@ class DataServices {
       return 'Gagal menghapus foto $e';
     }
   }
+
+  Future<void> updateImagesUploader(
+      String oldUsername, String newUsername) async {
+    try {
+      Query query = imageCollection.where('uploader', isEqualTo: oldUsername);
+      QuerySnapshot imagesSnapshot = await query.get();
+
+      WriteBatch updateBatch = FirebaseFirestore.instance.batch();
+
+      imagesSnapshot.docs.forEach((document) {
+        var documentReference = imageCollection.doc(document.id);
+
+        updateBatch.update(documentReference, {'uploader': newUsername});
+      });
+
+      await updateBatch.commit();
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
   // Future<void> _confirmPasswordReset(ActionCodeInfo link) async {
   //   try {
   //     await FirebaseAuth.instance.confirmPasswordReset(

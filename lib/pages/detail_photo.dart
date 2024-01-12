@@ -164,7 +164,7 @@ class _Detail extends State<DetailPhoto> {
                   children: [
                     // Placeholder for user
                     Text(
-                      '@${imageSnapshot?.get('uploader') ?? "@Uploader"}',
+                      '@${imageSnapshot?.get('uploader') ?? "Uploader"}',
                       style: TextStyle(color: Colors.grey[700], fontSize: 20),
                     ),
                     SizedBox(height: 5),

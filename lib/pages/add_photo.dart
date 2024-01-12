@@ -33,6 +33,15 @@ class _CreatePhoto extends State<CreatePhoto> {
   ];
 
   DocumentSnapshot? imageSnapshot;
+  File? selectedFile;
+  //For web only
+  // String? imagePath;
+  PlatformFile? selectedFileWeb;
+
+  String selectedCategory = 'Abstract';
+
+  TextEditingController judulController = TextEditingController();
+  TextEditingController deskripsiController = TextEditingController();
 
   Future<void> getImageData() async {
     DocumentReference? imageData =
@@ -41,7 +50,11 @@ class _CreatePhoto extends State<CreatePhoto> {
     await imageData!.get().then((DocumentSnapshot documentSnapshot) {
       setState(() {
         imageSnapshot = documentSnapshot;
+
         selectedCategory = imageSnapshot!.get('kategori');
+        judulController.text = imageSnapshot!.get('judul');
+        deskripsiController.text = imageSnapshot!.get('deskripsi');
+
         isEditing = true;
       });
     });
@@ -62,16 +75,6 @@ class _CreatePhoto extends State<CreatePhoto> {
       getImageData();
     }
   }
-
-  File? selectedFile;
-  //For web only
-  // String? imagePath;
-  PlatformFile? selectedFileWeb;
-
-  String selectedCategory = 'Abstract';
-
-  TextEditingController judulController = TextEditingController();
-  TextEditingController deskripsiController = TextEditingController();
 
   Future<void> _pickFile() async {
     try {

@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    refreshData();
+    // refreshData();
     return Scaffold(
       appBar: AppBar(
         title: Text("PHASE",
