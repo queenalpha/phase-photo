@@ -36,7 +36,7 @@ class _Profile extends State<ProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 20),
+                        padding: const EdgeInsets.only(top: 79),
                         child: Container(
                           child: CircleAvatar(
                             radius: 70,
@@ -60,9 +60,7 @@ class _Profile extends State<ProfilePage> {
                       ),
                       SizedBox(height: 10),
                       ElevatedButton(
-                        onPressed: () {
-                  
-                        },
+                        onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           primary: Colors.grey,
                           fixedSize: Size(133, 44),
@@ -70,7 +68,7 @@ class _Profile extends State<ProfilePage> {
                         child: Text(
                           'Edit Profile',
                           style: TextStyle(
-                            color: Colors.white, 
+                            color: Colors.white,
                           ),
                         ),
                       ),
