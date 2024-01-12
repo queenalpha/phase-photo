@@ -14,15 +14,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final dataService = DataServices();
 
-  final _items = [
-    "assets/analog.jpg",
-    "assets/bird.jpg",
-    "assets/man with a cap.jpg",
-    "assets/man with shadow.jpg",
-    "assets/plant.jpg",
-    "assets/sofia building.jpg",
-    "assets/boy.jpg",
-  ];
   late Stream<List<DocumentSnapshot>> _imagesStream;
 
   @override
@@ -80,14 +71,15 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
+                    print(imagesSnapshot.elementAt(index).id);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => DetailPhoto(
-                            // imageUrl: imagesSnapshot
-                            //     .elementAt(index)
-                            //     .get('image_url')
-                            ),
+                          // imageId: 'alzvrMK1OlGkwKuuz5Ff',
+                          imageId:
+                              imagesSnapshot.elementAt(index).id.toString(),
+                        ),
                       ),
                     );
                   },

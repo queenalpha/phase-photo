@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:phase_photo/components/button.dart';
 import 'package:phase_photo/pages/edit_profile.dart';
+import 'package:phase_photo/services/data_services.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -12,6 +14,10 @@ class ProfilePage extends StatefulWidget {
 
 class _Profile extends State<ProfilePage> {
   final currentUser = FirebaseAuth.instance.currentUser;
+
+  final dataService = DataServices();
+
+  late Stream<List<DocumentSnapshot>> _imagesStream;
 
   final _items = [
     "assets/analog.jpg",
@@ -24,7 +30,22 @@ class _Profile extends State<ProfilePage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _imagesStream =
+        dataService.getImagesByUser(currentUser!.displayName!).asStream();
+  }
+
+  Future<void> refreshData() async {
+    setState(() {
+      _imagesStream =
+          dataService.getImagesByUser(currentUser!.displayName!).asStream();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    refreshData();
     return Scaffold(
       body: DefaultTabController(
         length: 2,
@@ -105,20 +126,47 @@ class _Profile extends State<ProfilePage> {
           body: TabBarView(
             children: [
               //uploaded page
-              GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 4.0,
-                  crossAxisSpacing: 4.0,
-                  childAspectRatio: 1.0,
-                ),
-                itemCount: _items.length > 20 ? _items.length : 20,
-                itemBuilder: (BuildContext context, int index) {
-                  final imageUrl = _items[index % _items.length];
-                  return Image.asset(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                  );
+              StreamBuilder(
+                stream: _imagesStream,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else if (!snapshot.hasData) {
+                    return Center(
+                      child: Text(
+                        'Gallery kosong',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    );
+                  } else if (snapshot.data!.isEmpty) {
+                    return Center(
+                      child: Text(
+                        'Gallery kosong',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    );
+                  } else {
+                    List<DocumentSnapshot> imagesSnapshot = snapshot.data!;
+                    print(imagesSnapshot.length);
+                    return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 4.0,
+                        crossAxisSpacing: 4.0,
+                        childAspectRatio: 1.0,
+                      ),
+                      itemCount: imagesSnapshot.length,
+                      itemBuilder: (context, index) {
+                        // final imageUrl = _items[index % _items.length];
+                        return Image.network(
+                          imagesSnapshot.elementAt(index).get('image_url'),
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    );
+                  }
                 },
               ),
 

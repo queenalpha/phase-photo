@@ -1,9 +1,14 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:phase_photo/pages/add_photo.dart';
+import 'package:phase_photo/services/data_services.dart';
 
 class DetailPhoto extends StatefulWidget {
-  const DetailPhoto({Key? key});
+  final String imageId;
+
+  const DetailPhoto({required this.imageId});
 
   @override
   State<DetailPhoto> createState() => _Detail();
@@ -11,6 +16,7 @@ class DetailPhoto extends StatefulWidget {
 
 class _Detail extends State<DetailPhoto> {
   final currentUser = FirebaseAuth.instance.currentUser;
+  final dataService = DataServices();
 
   File? selectedFile;
 
@@ -18,8 +24,40 @@ class _Detail extends State<DetailPhoto> {
 
   bool showDropdownIcon = false; // Variable to control visibility
 
+  // DocumentReference? image;
+
+  DocumentSnapshot? imageSnapshot;
+
+  Future<void> checkImage() async {
+    if (imageSnapshot != null) {
+      if (currentUser!.displayName == imageSnapshot!.get('uploader')) {
+        setState(() {
+          showDropdownIcon = true;
+        });
+      }
+    }
+  }
+
+  Future<void> getImageData() async {
+    DocumentReference? imageData =
+        await dataService.getImageById(widget.imageId);
+
+    await imageData!.get().then((DocumentSnapshot documentSnapshot) {
+      setState(() {
+        imageSnapshot = documentSnapshot;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getImageData();
+  }
+
   @override
   Widget build(BuildContext context) {
+    checkImage();
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -31,7 +69,7 @@ class _Detail extends State<DetailPhoto> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Title',
+                '${imageSnapshot?.get('judul') ?? "Title"}',
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -41,7 +79,7 @@ class _Detail extends State<DetailPhoto> {
               SizedBox(width: 3),
               // Placeholder for category
               Text(
-                'Nama kategori',
+                '${imageSnapshot?.get('kategori') ?? "Nama kategori"}',
                 style: TextStyle(color: Colors.grey, fontSize: 15),
               ),
             ],
@@ -53,38 +91,57 @@ class _Detail extends State<DetailPhoto> {
           child: SizedBox(),
         ),
         actions: [
-          if (showDropdownIcon)
-            IconButton(
-              icon: Icon(Icons.arrow_drop_down),
-              onPressed: () {
-                // Implement your dropdown logic here
-              },
-            ),
+          // if (showDropdownIcon)
+          // IconButton(
+          //   icon: Icon(Icons.arrow_drop_down),
+          //   onPressed: () {
+          //     // Implement your dropdown logic here
+          //   },
+          // ),
           // Delete option using PopupMenuButton
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              if (value == 'Update') {
-               //logic
-              }
-              if (value == 'Delete') {
-               //logic
-              }
-            },
-            itemBuilder: (BuildContext context) => [
-              PopupMenuItem<String>(
-                value: 'Update',
-                child: ListTile(
-                  title: Text('Update'),
+          if (showDropdownIcon)
+            PopupMenuButton<String>(
+              onSelected: (value) async {
+                if (value == 'Update') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CreatePhoto(
+                        imageId: widget.imageId,
+                      ),
+                    ),
+                  );
+                }
+                if (value == 'Delete') {
+                  String deleteStatus = await dataService.deleteImage(
+                    widget.imageId,
+                    imageSnapshot?.get('image_name'),
+                  );
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(deleteStatus),
+                    ),
+                  );
+
+                  Navigator.pushReplacementNamed(context, 'home');
+                }
+              },
+              itemBuilder: (BuildContext context) => [
+                PopupMenuItem<String>(
+                  value: 'Update',
+                  child: ListTile(
+                    title: Text('Update'),
+                  ),
                 ),
-              ),
-              PopupMenuItem<String>(
-                value: 'Delete',
-                child: ListTile(
-                  title: Text('Delete'),
+                PopupMenuItem<String>(
+                  value: 'Delete',
+                  child: ListTile(
+                    title: Text('Delete'),
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
         ],
       ),
       body: Stack(
@@ -94,8 +151,9 @@ class _Detail extends State<DetailPhoto> {
               Container(
                 color: Colors.grey[300],
                 height: 500,
-                child: selectedFile != null
-                    ? Image.file(selectedFile!, fit: BoxFit.cover)
+                child: imageSnapshot != null
+                    ? Image.network(imageSnapshot?.get('image_url'),
+                        fit: BoxFit.cover)
                     : Icon(Icons.photo_outlined, color: Colors.grey, size: 100),
               ),
               SizedBox(height: 5),
@@ -106,13 +164,13 @@ class _Detail extends State<DetailPhoto> {
                   children: [
                     // Placeholder for user
                     Text(
-                      '@${currentUser!.displayName}',
+                      '@${imageSnapshot?.get('uploader') ?? "@Uploader"}',
                       style: TextStyle(color: Colors.grey[700], fontSize: 20),
                     ),
                     SizedBox(height: 5),
                     // Placeholder for title
                     Text(
-                      'Judul Foto',
+                      '${imageSnapshot?.get('judul') ?? "Judul Foto"}',
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -122,7 +180,7 @@ class _Detail extends State<DetailPhoto> {
                     SizedBox(height: 5),
                     // Placeholder for description
                     Text(
-                      'Lorem ipsum is simply dummy text of the printing and typesetting industry',
+                      '${imageSnapshot?.get('deskripsi') ?? "Lorem ipsum is simply dummy text of the printing and typesetting industry"}',
                       style: TextStyle(
                         color: Colors.grey[700],
                         fontSize: 20,

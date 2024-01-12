@@ -20,7 +20,6 @@ class CreatePhoto extends StatefulWidget {
 class _CreatePhoto extends State<CreatePhoto> {
   final currentUser = FirebaseAuth.instance.currentUser;
   final dataService = DataServices();
-  bool isEditing = false;
   // Define a list of categories
   List<String> categories = [
     'Abstract',
@@ -41,18 +40,8 @@ class _CreatePhoto extends State<CreatePhoto> {
     await imageData!.get().then((DocumentSnapshot documentSnapshot) {
       setState(() {
         imageSnapshot = documentSnapshot;
-        selectedCategory = imageSnapshot!.get('kategori');
-        isEditing = true;
       });
     });
-  }
-
-  Future<void> setCategory() async {
-    if (widget.imageId != null) {
-      setState(() {
-        selectedCategory = imageSnapshot!.get('kategori');
-      });
-    }
   }
 
   @override
@@ -171,7 +160,7 @@ class _CreatePhoto extends State<CreatePhoto> {
               width: double.infinity,
               height: 316,
               color: Colors.grey[300],
-              child: widget.imageId != null && imageSnapshot != null
+              child: widget.imageId != null
                   ? Image.network(imageSnapshot!.get('image_url'))
                   : selectedFile == null && selectedFileWeb == null
                       ? Icon(
@@ -180,6 +169,7 @@ class _CreatePhoto extends State<CreatePhoto> {
                         )
                       : kIsWeb
                           ? Image.memory(selectedFileWeb!.bytes!)
+                          // ? Image.network(selectedFileWeb!.path!)
                           : Image.file(selectedFile!),
             ),
           ),
@@ -194,7 +184,7 @@ class _CreatePhoto extends State<CreatePhoto> {
           Container(
             width: double.infinity,
             child: DropdownButton<String>(
-              value: selectedCategory,
+              value: imageSnapshot?.get('kategori') ?? selectedCategory,
               onChanged: (String? newValue) {
                 setState(() {
                   selectedCategory = newValue!;
@@ -218,63 +208,71 @@ class _CreatePhoto extends State<CreatePhoto> {
           SizedBox(height: 20),
           buttons(
             onPressed: () async {
-              print(isEditing);
+              print(widget.imageId);
               try {
-                if (isEditing) {
-                  Map<String, String> updateImage = {
+                String? imageUrl = await uploadFile();
+                String? imageName;
+
+                if (kIsWeb) {
+                  imageName = selectedFileWeb!.name;
+                } else {
+                  imageName = basename(selectedFile!.path);
+                }
+
+                if (imageUrl == 'File is null') {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                          'File kosong, silahkan pilih file terlebih dahulu'),
+                    ),
+                  );
+                } else if (imageUrl == 'Error occurred') {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Terjadi kesalahan saat upload file'),
+                    ),
+                  );
+                } else {
+                  String username =
+                      FirebaseAuth.instance.currentUser!.displayName!;
+
+                  Map<String, String> imageData = {
                     'judul': judulController.text,
                     'kategori': selectedCategory,
                     'deskripsi': deskripsiController.text,
+                    'image_url': imageUrl!,
+                    'uploader': username,
+                    'image_name': imageName,
                   };
 
-                  bool status = await dataService.updateImage(
-                      widget.imageId!, updateImage);
-                  print(status);
-                  if (!status) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Gagal mengubah file'),
-                      ),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Berhasil mengubah file'),
-                      ),
-                    );
-                    setState(() {
-                      isEditing = false;
-                    });
-                    Navigator.pushReplacementNamed(context, 'home');
-                  }
-                } else {
-                  String? imageUrl = await uploadFile();
-                  String? imageName;
+                  if (widget.imageId != null) {
+                    Map<String, String> updateImage = {
+                      'judul': judulController.text,
+                      'kategori': selectedCategory,
+                      'deskripsi': deskripsiController.text,
+                      'image_url': imageUrl!,
+                      'image_name': imageName,
+                    };
+                    bool status = await dataService.updateImage(
+                        widget.imageId!, updateImage);
 
-                  if (kIsWeb) {
-                    imageName = selectedFileWeb!.name;
-                  } else {
-                    imageName = basename(selectedFile!.path);
-                  }
+                    if (status) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Gagal mengubah file'),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Berhasil mengubah file'),
+                        ),
+                      );
 
-                  if (imageUrl == 'File is null') {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                            'File kosong, silahkan pilih file terlebih dahulu'),
-                      ),
-                    );
-                  } else if (imageUrl == 'Error occurred') {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Terjadi kesalahan saat upload file'),
-                      ),
-                    );
+                      Navigator.pushReplacementNamed(context, 'home');
+                    }
                   } else {
-                    String username =
-                        FirebaseAuth.instance.currentUser!.displayName!;
-
-                    Map<String, String> imageData = {
+                    Map<String, String> newImage = {
                       'judul': judulController.text,
                       'kategori': selectedCategory,
                       'deskripsi': deskripsiController.text,
@@ -284,7 +282,7 @@ class _CreatePhoto extends State<CreatePhoto> {
                     };
 
                     DocumentReference? addedDocument =
-                        await dataService.addImage(imageData);
+                        await dataService.addImage(newImage);
 
                     if (await addedDocument!.snapshots().isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
