@@ -3,20 +3,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:phase_photo/components/button.dart';
 import 'package:phase_photo/configuration/textField.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart';
 import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
 import 'package:phase_photo/services/data_services.dart';
 
-class CreateHistory extends StatefulWidget {
-  const CreateHistory({Key? key});
+class CreatePhoto extends StatefulWidget {
+  const CreatePhoto({Key? key});
 
   @override
-  State<CreateHistory> createState() => _CreateHistory();
+  State<CreatePhoto> createState() => _CreatePhoto();
 }
 
-class _CreateHistory extends State<CreateHistory> {
+class _CreatePhoto extends State<CreatePhoto> {
   final currentUser = FirebaseAuth.instance.currentUser;
   final dataService = DataServices();
   // Define a list of categories
@@ -182,7 +183,7 @@ class _CreateHistory extends State<CreateHistory> {
             ),
           ),
           SizedBox(height: 20),
-          ElevatedButton(
+          buttons(
             onPressed: () async {
               try {
                 String? imageUrl = await uploadFile();
@@ -234,7 +235,11 @@ class _CreateHistory extends State<CreateHistory> {
                 );
               }
             },
-            child: Text('Upload'),
+            colour: Colors.grey,
+            title: 'Upload',
+            width: 300,
+            height: 35,
+            textColor: Colors.white,
           ),
         ],
       ),

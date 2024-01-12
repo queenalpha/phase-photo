@@ -35,3 +35,43 @@ class RoundedButton extends StatelessWidget {
     );
   }
 }
+
+class buttons extends StatelessWidget {
+  buttons(
+      {required this.colour,
+      required this.title,
+      required this.textColor,
+      required this.onPressed,
+      required this.width,
+      required this.height});
+
+  final Color colour;
+  final Color textColor;
+  final String title;
+  final double width;
+  final double height;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 1),
+      child: Material(
+        elevation: 5,
+        color: colour,
+        borderRadius: BorderRadius.circular(8),
+        child: MaterialButton(
+          onPressed: onPressed,
+          minWidth: width,
+          height: height,
+          child: Text(
+            title,
+            style: TextStyle(
+              color: textColor,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:phase_photo/components/button.dart';
+import 'package:phase_photo/pages/edit_profile.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -46,6 +48,15 @@ class _Profile extends State<ProfilePage> {
                               size: 80.0,
                               color: Colors.white,
                             ),
+                            //  backgroundImage:
+                            //                   NetworkImage(fileUri + profpic),
+                            //               child: profpic == '-'
+                            //                   ? Icon(
+                            //                       color: Colors.grey[500],
+                            //                       Icons.person,
+                            //                       size: 70.0,
+                            //                     )
+                            //                   : SizedBox.shrink(),
                           ),
                         ),
                       ),
@@ -59,18 +70,15 @@ class _Profile extends State<ProfilePage> {
                         ),
                       ),
                       SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.grey,
-                          fixedSize: Size(133, 44),
-                        ),
-                        child: Text(
-                          'Edit Profile',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
+                      buttons(
+                        onPressed: () {
+                          Navigator.pushNamed(context, 'editProfile');
+                        },
+                        colour: Colors.grey,
+                        title: 'Edit Profile',
+                        textColor: Colors.white,
+                        width: 133,
+                        height: 44,
                       ),
                       SizedBox(height: 20),
                     ],

@@ -15,7 +15,7 @@ class _NavigationBarDemoState extends State<NavigationBarDemo> {
 
   final List<Widget> _page = const [
     HomePage(),
-    CreateHistory(),
+    CreatePhoto(),
     ProfilePage(),
   ];
 

@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class DetailPhoto extends StatefulWidget {
   const DetailPhoto({Key? key});
@@ -17,13 +15,15 @@ class _Detail extends State<DetailPhoto> {
   File? selectedFile;
 
   String selectedCategory = 'Abstract';
+
+  bool showDropdownIcon = false; // Variable to control visibility
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+        iconTheme: IconThemeData(
+          color: Colors.black,
         ),
         title: Padding(
           padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
@@ -39,6 +39,7 @@ class _Detail extends State<DetailPhoto> {
                 ),
               ),
               SizedBox(width: 3),
+              // Placeholder for category
               Text(
                 'Nama kategori',
                 style: TextStyle(color: Colors.grey, fontSize: 15),
@@ -51,6 +52,40 @@ class _Detail extends State<DetailPhoto> {
           preferredSize: Size.fromHeight(10),
           child: SizedBox(),
         ),
+        actions: [
+          if (showDropdownIcon)
+            IconButton(
+              icon: Icon(Icons.arrow_drop_down),
+              onPressed: () {
+                // Implement your dropdown logic here
+              },
+            ),
+          // Delete option using PopupMenuButton
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'Update') {
+               //logic
+              }
+              if (value == 'Delete') {
+               //logic
+              }
+            },
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem<String>(
+                value: 'Update',
+                child: ListTile(
+                  title: Text('Update'),
+                ),
+              ),
+              PopupMenuItem<String>(
+                value: 'Delete',
+                child: ListTile(
+                  title: Text('Delete'),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -59,12 +94,9 @@ class _Detail extends State<DetailPhoto> {
               Container(
                 color: Colors.grey[300],
                 height: 500,
-                child:
-                    // Image.network(
-                    //   'image_url',
-                    //   fit: BoxFit.cover,
-                    // ),
-                    Icon(Icons.photo_outlined, color: Colors.grey, size: 100),
+                child: selectedFile != null
+                    ? Image.file(selectedFile!, fit: BoxFit.cover)
+                    : Icon(Icons.photo_outlined, color: Colors.grey, size: 100),
               ),
               SizedBox(height: 5),
               Container(
@@ -72,11 +104,13 @@ class _Detail extends State<DetailPhoto> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Placeholder for user
                     Text(
                       '@${currentUser!.displayName}',
                       style: TextStyle(color: Colors.grey[700], fontSize: 20),
                     ),
                     SizedBox(height: 5),
+                    // Placeholder for title
                     Text(
                       'Judul Foto',
                       style: TextStyle(
@@ -86,6 +120,7 @@ class _Detail extends State<DetailPhoto> {
                       ),
                     ),
                     SizedBox(height: 5),
+                    // Placeholder for description
                     Text(
                       'Lorem ipsum is simply dummy text of the printing and typesetting industry',
                       style: TextStyle(
@@ -96,11 +131,10 @@ class _Detail extends State<DetailPhoto> {
                     SizedBox(height: 150),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(330, 0, 0, 0),
-                      // bottom: 20,
-                      // right: 20,
                       child: FloatingActionButton(
                         onPressed: () {
-                          // Implementasi bookmark
+                          // Implement bookmark functionality
+                          // Add your logic here
                         },
                         backgroundColor: Colors.grey[400],
                         shape: RoundedRectangleBorder(

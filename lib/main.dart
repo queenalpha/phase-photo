@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:phase_photo/firebase_options.dart';
 import 'package:phase_photo/configuration/bottomNavigation.dart';
+import 'package:phase_photo/pages/edit_profile.dart';
 import 'package:phase_photo/pages/forgetpassword.dart';
 import 'package:phase_photo/pages/home.dart';
 import 'package:phase_photo/pages/login.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         'profile': (context) => const ProfilePage(),
         'home': (context) => const NavigationBarDemo(),
         'register': (context) => const Register(),
+        'editProfile': (context) => const EditProfile(),
       },
     );
   }
