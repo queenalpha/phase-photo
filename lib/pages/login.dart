@@ -7,7 +7,6 @@ import 'package:phase_photo/util/validator.dart';
 
 import '../configuration/textField.dart';
 
-
 class Login extends StatefulWidget {
   const Login({Key? key});
 
